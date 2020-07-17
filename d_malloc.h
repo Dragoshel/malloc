@@ -3,18 +3,21 @@
 
 #include <stdio.h>
 
+typedef struct meta_block * m_block;
+
+#define META_SIZE sizeof(struct meta_block)
+
+m_block global_last = NULL;
+
 struct meta_block {
-	size_t mem_size;
-	struct meta_block *next;
+	size_t size;
 	int free;
-	int magic;
+	m_block next;
 };
 
-#define META_SIZE sizeof(meta_block)
+m_block find_free_space(m_block *last, size_t size);
 
-struct meta_block *find_free_block(size_t size);
-
-struct meta_block *request_space(struct meta_block *last, size_t size);
+m_block request_space(m_block last, size_t size);
 
 void *malloc(size_t size);
 
